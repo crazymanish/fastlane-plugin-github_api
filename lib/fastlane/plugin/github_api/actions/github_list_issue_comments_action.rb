@@ -40,14 +40,14 @@ module Fastlane
             server_url: server_url
           )
           
-          status_code = response.key?('status') ? response['status'] : nil
+          status_code = response.is_a?(Hash) && response.key?('status') ? response['status'] : nil
           result = {
             status: status_code,
             body: response,
             json: response
           }
           
-          if response.key?('error')
+          if response.is_a?(Hash) && response.key?('error')
             UI.error("GitHub responded with an error: #{response['error']}")
             UI.user_error!("GitHub API error: #{response['error']}")
             return nil
