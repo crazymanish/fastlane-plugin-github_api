@@ -103,19 +103,21 @@ module Fastlane
                                  optional: true,
                             default_value: "https://api.github.com"),
             FastlaneCore::ConfigItem.new(key: :repo_owner,
-                              description: "Repository owner (organization or username)",
-                                 optional: false,
-                                     type: String,
-                              verify_block: proc do |value|
-                                UI.user_error!("No repository owner provided, pass using `repo_owner: 'owner'`") if value.to_s.empty?
-                              end),
+                                 env_name: "GITHUB_API_REPO_OWNER",
+                                 description: "Repository owner (organization or username)",
+                                    optional: false,
+                                        type: String,
+                               verify_block: proc do |value|
+                                  UI.user_error!("No repository owner provided, pass using `repo_owner: 'owner'`") if value.to_s.empty?
+                                end),
             FastlaneCore::ConfigItem.new(key: :repo_name,
-                              description: "Repository name",
-                                 optional: false,
-                                     type: String,
-                              verify_block: proc do |value|
-                                UI.user_error!("No repository name provided, pass using `repo_name: 'name'`") if value.to_s.empty?
-                              end),
+                                 env_name: "GITHUB_API_REPO_NAME",
+                                 description: "Repository name",
+                                    optional: false,
+                                        type: String,
+                               verify_block: proc do |value|
+                                  UI.user_error!("No repository name provided, pass using `repo_name: 'name'`") if value.to_s.empty?
+                                end),
             FastlaneCore::ConfigItem.new(key: :issue_number,
                               description: "The issue number to comment on",
                                  optional: false,
