@@ -38,13 +38,12 @@ module Fastlane
           api_path = "/repos/#{repo_owner}/#{repo_name}/pulls/#{pull_number}/comments"
           
           UI.message("Creating a comment on pull request ##{pull_number} in #{repo_owner}/#{repo_name}")
-          
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: api_path,
+            params: request_body,
             method: :post,
-            params: request_body
+            server_url: server_url
           )
           
           status_code = response[:status]

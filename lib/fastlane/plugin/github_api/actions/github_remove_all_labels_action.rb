@@ -16,6 +16,7 @@ module Fastlane
           repo_owner = params[:repo_owner]
           repo_name = params[:repo_name]
           issue_number = params[:issue_number]
+          server_url = params[:server_url]
           
           # Validate parameters (additional validation beyond what's in ConfigItem)
           UI.user_error!("No GitHub issue number given, pass using `issue_number: 123`") unless issue_number.to_s.length > 0
@@ -29,7 +30,7 @@ module Fastlane
             token: token,
             path: path,
             method: :delete,
-            server_url: params[:server_url]
+            server_url: server_url
           )
           
           status_code = response.key?('status') ? response['status'] : nil

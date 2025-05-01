@@ -30,13 +30,12 @@ module Fastlane
           path = "/repos/#{repo_owner}/#{repo_name}/pulls/#{pull_number}/reviews/#{review_id}/dismissals"
           
           UI.message("Dismissing review ##{review_id} for pull request ##{pull_number} in #{repo_owner}/#{repo_name}")
-          
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: path,
+            params: body,
             method: :put,
-            params: body
+            server_url: server_url
           )
           
           status_code = response[:status]

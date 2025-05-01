@@ -16,6 +16,7 @@ module Fastlane
           repo_owner = params[:repo_owner]
           repo_name = params[:repo_name]
           comment_id = params[:comment_id]
+          server_url = params[:server_url]
           
           # Validate parameters (additional validation beyond what's in ConfigItem)
           UI.user_error!("No comment ID provided, pass using `comment_id: 12345678`") unless comment_id.to_s.length > 0
@@ -25,12 +26,11 @@ module Fastlane
           
           # Make the request
           UI.message("Fetching comment ID #{comment_id} from #{repo_owner}/#{repo_name}")
-          server_url = params[:server_url]
           response = Helper::GithubApiHelper.github_api_request(
             token: token,
-            server_url: server_url,
             path: path,
-            method: :get
+            method: :get,
+            server_url: server_url
           )
           
           status_code = response.key?('status') ? response['status'] : nil

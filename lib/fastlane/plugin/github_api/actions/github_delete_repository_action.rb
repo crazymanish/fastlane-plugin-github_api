@@ -37,12 +37,11 @@ module Fastlane
           end
           
           UI.message("Deleting repository: #{repo_owner}/#{repo_name}")
-          
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: path,
-            method: :delete
+            method: :delete,
+            server_url: server_url
           )
           
           status_code = response[:status]

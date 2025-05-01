@@ -16,6 +16,7 @@ module Fastlane
           repo_owner = params[:repo_owner]
           repo_name = params[:repo_name]
           event_id = params[:event_id]
+          server_url = params[:server_url]
           
           # Validate parameters (additional validation beyond what's in ConfigItem)
           UI.user_error!("No event ID provided, pass using `event_id: 12345678`") unless event_id.to_s.length > 0
@@ -25,12 +26,11 @@ module Fastlane
           
           # Make the request
           UI.message("Fetching issue event ##{event_id} from #{repo_owner}/#{repo_name}")
-          server_url = params[:server_url]
           response = Helper::GithubApiHelper.github_api_request(
             token: token,
-            server_url: server_url,
             path: path,
-            method: :get
+            method: :get,
+            server_url: server_url
           )
           
           status_code = response.key?('status') ? response['status'] : nil

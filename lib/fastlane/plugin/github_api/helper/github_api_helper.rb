@@ -15,12 +15,13 @@ module Fastlane
         # @param server_url [String] GitHub API server URL
         # @param headers [Hash] Additional headers to include in the request
         # @return [Hash] Response from the GitHub API
-        def github_api_request(token: nil, path:, params: nil, method: :get, server_url: "https://api.github.com", headers: {})
+        def github_api_request(token: nil, path:, params: nil, method: :get, server_url: nil, headers: {})
           require 'json'
           
           # Validate parameters
           UI.user_error!("No GitHub API token given, pass using `token: 'token'`") if token.to_s.empty?
           UI.user_error!("GitHub API path cannot be empty") if path.to_s.empty?
+          UI.user_error!("GitHub API server URL cannot be empty") if server_url.to_s.empty?
           
           # Set up headers
           request_headers = headers.clone || {}

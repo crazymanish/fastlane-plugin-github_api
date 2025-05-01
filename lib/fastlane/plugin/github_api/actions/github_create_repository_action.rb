@@ -49,13 +49,12 @@ module Fastlane
           end
           
           UI.message("Creating repository: #{name}")
-          
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: path,
             params: body_params,
-            method: :post
+            method: :post,
+            server_url: server_url
           )
           
           status_code = response[:status]

@@ -23,12 +23,11 @@ module Fastlane
           path = "/repos/#{repo_owner}/#{repo_name}/issues/#{issue_number}/reactions/#{reaction_id}"
           
           UI.message("Deleting reaction ##{reaction_id} for issue ##{issue_number} in #{repo_owner}/#{repo_name}")
-          
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: path,
             method: :delete,
+            server_url: server_url,
             headers: { 'Accept' => 'application/vnd.github.squirrel-girl-preview+json' }
           )
           

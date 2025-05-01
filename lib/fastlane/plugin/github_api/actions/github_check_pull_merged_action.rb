@@ -23,12 +23,11 @@ module Fastlane
           path = "/repos/#{repo_owner}/#{repo_name}/pulls/#{pull_number}/merge"
           
           UI.message("Checking if pull request ##{pull_number} from #{repo_owner}/#{repo_name} is merged")
-          
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: path,
-            method: :get
+            method: :get,
+            server_url: server_url
           )
           
           status_code = response[:status]

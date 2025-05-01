@@ -33,13 +33,12 @@ module Fastlane
           body_params[:lock_reason] = lock_reason if lock_reason
           
           UI.message("Locking issue ##{issue_number} in #{repo_owner}/#{repo_name}")
-          
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: path,
             params: body_params,
-            method: :put
+            method: :put,
+            server_url: server_url
           )
           
           status_code = response[:status]

@@ -28,12 +28,11 @@ module Fastlane
           path = "/repos/#{repo_owner}/#{repo_name}/issues/#{issue_number}"
           
           UI.message("Fetching issue ##{issue_number} from #{repo_owner}/#{repo_name}")
-          
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: path,
-            method: :get
+            method: :get,
+            server_url: server_url
           )
           
           status_code = response[:status]

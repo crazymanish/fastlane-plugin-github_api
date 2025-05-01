@@ -31,13 +31,12 @@ module Fastlane
           path = "/repos/#{repo_owner}/#{repo_name}/pulls/comments/#{comment_id}/reactions"
           
           UI.message("Creating '#{content}' reaction for pull request review comment ##{comment_id} in #{repo_owner}/#{repo_name}")
-          
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: path,
-            method: :post,
             params: body,
+            method: :post,
+            server_url: server_url,
             headers: { 'Accept' => 'application/vnd.github.squirrel-girl-preview+json' }
           )
           

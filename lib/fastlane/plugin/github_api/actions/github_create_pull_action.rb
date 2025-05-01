@@ -42,13 +42,12 @@ module Fastlane
           body_params[:issue] = params[:issue] if params[:issue]
           
           UI.message("Creating pull request in #{repo_owner}/#{repo_name}: #{params[:title]}")
-          
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: path,
             params: body_params,
-            method: :post
+            method: :post,
+            server_url: server_url
           )
           
           status_code = response[:status]

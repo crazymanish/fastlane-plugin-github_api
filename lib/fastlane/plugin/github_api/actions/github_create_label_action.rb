@@ -15,6 +15,7 @@ module Fastlane
           token = params[:api_token]
           repo_owner = params[:repo_owner]
           repo_name = params[:repo_name]
+          server_url = params[:server_url]
           
           # Validate parameters (additional validation beyond what's in ConfigItem)
           UI.user_error!("No label name provided, pass using `name: 'bug'`") if params[:name].to_s.empty?
@@ -33,13 +34,12 @@ module Fastlane
           
           # Make the request
           UI.message("Creating label '#{params[:name]}' in #{repo_owner}/#{repo_name}")
-          server_url = params[:server_url]
           response = Helper::GithubApiHelper.github_api_request(
             token: token,
-            server_url: server_url,
             path: path,
             params: body_params,
-            method: :post
+            method: :post,
+            server_url: server_url
           )
           
           status_code = response.key?('status') ? response['status'] : nil

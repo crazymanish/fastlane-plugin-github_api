@@ -37,10 +37,10 @@ module Fastlane
           
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: path,
+            params: request_body,
             method: :post,
-            params: request_body
+            server_url: server_url
           )
           
           status_code = response[:status]

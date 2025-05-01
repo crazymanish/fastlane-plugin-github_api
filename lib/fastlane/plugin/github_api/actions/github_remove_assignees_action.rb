@@ -17,6 +17,7 @@ module Fastlane
           repo_name = params[:repo_name]
           issue_number = params[:issue_number]
           assignees = params[:assignees]
+          server_url = params[:server_url]
           
           # Validate parameters (additional validation beyond what's in ConfigItem)
           UI.user_error!("No GitHub issue number given, pass using `issue_number: 123`") unless issue_number.to_s.length > 0
@@ -32,13 +33,12 @@ module Fastlane
           
           # Make the request
           UI.message("Removing assignees #{assignees.join(', ')} from issue ##{issue_number} in #{repo_owner}/#{repo_name}")
-          server_url = params[:server_url]
           response = Helper::GithubApiHelper.github_api_request(
             token: token,
-            server_url: server_url,
             path: path,
             params: body_params,
-            method: :delete
+            method: :delete,
+            server_url: server_url
           )
           
           status_code = response.key?('status') ? response['status'] : nil

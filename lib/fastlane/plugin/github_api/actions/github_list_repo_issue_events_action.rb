@@ -15,6 +15,7 @@ module Fastlane
           token = params[:api_token]
           repo_owner = params[:repo_owner]
           repo_name = params[:repo_name]
+          server_url = params[:server_url]
           
           # Validate parameters (additional validation beyond what's in ConfigItem)
           UI.user_error!("No repository owner provided, pass using `repo_owner: 'owner'`") if repo_owner.to_s.empty?
@@ -34,7 +35,8 @@ module Fastlane
             token: token,
             path: path,
             params: query_params,
-            method: :get
+            method: :get,
+            server_url: server_url
           )
           
           status_code = response.key?('status') ? response['status'] : nil

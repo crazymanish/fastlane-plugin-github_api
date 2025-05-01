@@ -24,12 +24,11 @@ module Fastlane
           path = "/repos/#{repo_owner}/#{repo_name}/pulls/comments/#{comment_id}"
           
           UI.message("Deleting pull request comment #{comment_id} from #{repo_owner}/#{repo_name}")
-          
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: path,
-            method: :delete
+            method: :delete,
+            server_url: server_url
           )
           
           status_code = response[:status]

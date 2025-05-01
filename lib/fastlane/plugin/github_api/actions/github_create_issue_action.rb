@@ -38,13 +38,12 @@ module Fastlane
           body_params[:labels] = params[:labels] if params[:labels]
           
           UI.message("Creating new issue in #{repo_owner}/#{repo_name}: #{params[:title]}")
-          
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: path,
             params: body_params,
-            method: :post
+            method: :post,
+            server_url: server_url
           )
           
           status_code = response[:status]

@@ -28,12 +28,11 @@ module Fastlane
           path = "/repos/#{repo_owner}/#{repo_name}/issues/#{issue_number}/lock"
           
           UI.message("Unlocking issue ##{issue_number} in #{repo_owner}/#{repo_name}")
-          
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: path,
-            method: :delete
+            method: :delete,
+            server_url: server_url
           )
           
           status_code = response[:status]

@@ -34,13 +34,12 @@ module Fastlane
           query_params[:page] = params[:page] if params[:page]
           
           UI.message("Listing pull requests for #{repo_owner}/#{repo_name}")
-          
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: path,
             params: query_params,
-            method: :get
+            method: :get,
+            server_url: server_url
           )
           
           status_code = response[:status]

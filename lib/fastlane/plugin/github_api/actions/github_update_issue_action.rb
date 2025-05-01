@@ -37,13 +37,12 @@ module Fastlane
           body_params[:labels] = params[:labels] if params[:labels]
           
           UI.message("Updating issue ##{issue_number} in #{repo_owner}/#{repo_name}")
-          
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
-            server_url: server_url,
             path: path,
             params: body_params,
-            method: :patch
+            method: :patch,
+            server_url: server_url
           )
           
           status_code = response[:status]
