@@ -33,8 +33,10 @@ module Fastlane
           
           # Make the request
           UI.message("Fetching milestones for #{repo_owner}/#{repo_name}")
+          server_url = params[:server_url]
           response = Helper::GithubApiHelper.github_api_request(
             token: token,
+            server_url: server_url,
             path: path,
             params: query_params,
             method: :get
@@ -103,6 +105,11 @@ module Fastlane
                                verify_block: proc do |value|
                                   UI.user_error!("No GitHub API token given, pass using `api_token: 'token'`") if value.to_s.empty?
                                 end),
+            FastlaneCore::ConfigItem.new(key: :server_url,
+                                 env_name: "GITHUB_API_SERVER_URL",
+                              description: "GitHub API server URL",
+                                 optional: true,
+                            default_value: "https://api.github.com"),
             FastlaneCore::ConfigItem.new(key: :repo_owner,
                                  description: "Repository owner (organization or username)",
                                     optional: false,

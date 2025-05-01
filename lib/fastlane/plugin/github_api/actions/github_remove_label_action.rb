@@ -93,6 +93,11 @@ module Fastlane
                                verify_block: proc do |value|
                                   UI.user_error!("No GitHub API token given, pass using `api_token: 'token'`") if value.to_s.empty?
                                 end),
+            FastlaneCore::ConfigItem.new(key: :server_url,
+                                 env_name: "GITHUB_API_SERVER_URL",
+                              description: "GitHub API server URL",
+                                 optional: true,
+                            default_value: "https://api.github.com"),
             FastlaneCore::ConfigItem.new(key: :repo_owner,
                                  description: "Repository owner (organization or username)",
                                     optional: false,
