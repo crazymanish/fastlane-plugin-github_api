@@ -110,6 +110,7 @@ module Fastlane
                                 UI.user_error!("No repository name provided, pass using `repo_name: 'name'`") if value.to_s.empty?
                               end),
             FastlaneCore::ConfigItem.new(key: :issue_number,
+                                 env_name: "GITHUB_API_ISSUE_NUMBER",
                               description: "The issue number",
                                  optional: false,
                                      type: Integer)

@@ -99,7 +99,7 @@ module Fastlane
                               description: "Name of the repository",
                                  optional: false),
             FastlaneCore::ConfigItem.new(key: :pull_number,
-                                 env_name: "GITHUB_PULL_NUMBER",
+                                 env_name: "GITHUB_API_PULL_NUMBER",
                               description: "The number of the pull request",
                                  optional: false,
                                      type: Integer)

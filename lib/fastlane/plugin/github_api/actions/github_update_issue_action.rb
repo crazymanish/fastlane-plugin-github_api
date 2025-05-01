@@ -114,6 +114,7 @@ module Fastlane
                                  optional: false,
                                      type: String),
             FastlaneCore::ConfigItem.new(key: :issue_number,
+                                 env_name: "GITHUB_API_ISSUE_NUMBER",
                               description: "The issue number to update",
                                  optional: false,
                                      type: Integer),

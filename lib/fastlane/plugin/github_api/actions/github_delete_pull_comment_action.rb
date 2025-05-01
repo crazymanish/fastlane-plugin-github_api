@@ -95,7 +95,7 @@ module Fastlane
                               description: "Name of the repository",
                                  optional: false),
             FastlaneCore::ConfigItem.new(key: :comment_id,
-                                 env_name: "GITHUB_PR_COMMENT_ID",
+                                 env_name: "GITHUB_API_PR_COMMENT_ID",
                               description: "The ID of the comment to delete",
                                  optional: false,
                                      type: Integer)
