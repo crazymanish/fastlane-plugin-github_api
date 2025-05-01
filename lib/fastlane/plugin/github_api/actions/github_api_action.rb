@@ -13,7 +13,7 @@ module Fastlane
       end
 
       def self.authors
-        ["Manish Rathi"]
+        ["crazymanish"]
       end
 
       def self.return_value

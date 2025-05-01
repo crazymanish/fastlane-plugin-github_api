@@ -165,7 +165,7 @@ module Fastlane
         end
 
         def authors
-          ["Manish Rathi"]
+          ["crazymanish"]
         end
 
         def example_code

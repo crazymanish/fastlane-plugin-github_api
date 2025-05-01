@@ -154,7 +154,7 @@ module Fastlane
         end
 
         def authors
-          ["Manish Rathi"]
+          ["crazymanish"]
         end
 
         def is_supported?(platform)
