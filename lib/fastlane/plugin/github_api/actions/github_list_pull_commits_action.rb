@@ -35,7 +35,7 @@ module Fastlane
           response = Helper::GithubApiHelper.github_api_request(
             token: api_token,
             path: path,
-            params: query_params.empty? ? nil : query_params
+            params: query_params.empty? ? nil : query_params,
             method: :get,
             server_url: server_url
           )
