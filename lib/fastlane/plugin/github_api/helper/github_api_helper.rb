@@ -14,7 +14,7 @@ module Fastlane
         # @param method [Symbol] HTTP method (:get, :post, :put, :patch, :delete)
         # @param server_url [String] GitHub API server URL
         # @param headers [Hash] Additional headers to include in the request
-        # @return [Hash] Response from the GitHub API
+        # @return [Hash] Response from the GitHub API with :status, :body, and :json keys
         def github_api_request(token: nil, path:, params: nil, method: :get, server_url: nil, headers: {})
           require 'json'
           
@@ -68,28 +68,45 @@ module Fastlane
             )
             
             status_code = response.status
+            response_body = response.body.to_s
             
-            if status_code.between?(200, 299)
-              # Parse JSON response if available
-              if response.body && !response.body.empty? && response.headers['Content-Type'] && response.headers['Content-Type'].include?('application/json')
-                return JSON.parse(response.body)
-              else
-                return response.body || true
-              end
-            else
-              # Handle error with informative error message
-              error_body = response.body ? parse_json(response.body) : {}
-              error_message = error_body['message'] || response.body || 'Unknown error'
-              return {
-                'error' => "HTTP Error #{status_code}: #{error_message}",
-                'status_code' => status_code,
-                'body' => response.body
-              }
+            # Parse JSON response if available
+            json_response = nil
+            if !response_body.empty? && response.headers['Content-Type'] && response.headers['Content-Type'].include?('application/json')
+              json_response = parse_json(response_body) || {}
             end
-          rescue => ex
-            return {
-              'error' => "Network Error: #{ex.message}"
+            
+            # Create the response hash with both new format and backward compatibility
+            result = {
+              status: status_code,
+              body: response_body,
+              json: json_response
             }
+            
+            # Add backward compatibility for error handling
+            # Copy json values to top level for backwards compatibility
+            if json_response.is_a?(Hash)
+              json_response.each do |key, value|
+                result[key] = value
+              end
+            end
+            
+            # Add status code at the top level for backward compatibility
+            result['status'] = status_code
+            
+            return result
+          rescue => ex
+            error_result = {
+              status: 0,
+              body: ex.message,
+              json: { 'error' => "Network Error: #{ex.message}" }
+            }
+            
+            # Add backward compatibility for error handling
+            error_result['error'] = "Network Error: #{ex.message}"
+            error_result['status'] = 0
+            
+            return error_result
           end
         end
         
