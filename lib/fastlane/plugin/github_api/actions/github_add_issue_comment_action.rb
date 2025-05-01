@@ -50,14 +50,15 @@ module Fastlane
             body: response[:body],
             json: json_response
           }
-          
-          if status_code.between?(200, 299)
+
+          # Robust status code check for reusability
+          if status_code.is_a?(Integer) && status_code.between?(200, 299)
             comment_id = json_response['id']
             UI.success("Successfully added comment ID: #{comment_id} to issue ##{issue_number} in #{repo_owner}/#{repo_name}")
           else
-            UI.error("Error adding comment: #{status_code}")
+            UI.error("Error adding comment: #{status_code.inspect}")
             UI.error(response[:body])
-            UI.user_error!("GitHub API returned #{status_code}: #{response[:body]}")
+            UI.user_error!("GitHub API returned #{status_code.inspect}: #{response[:body]}")
             return nil
           end
           
