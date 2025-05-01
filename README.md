@@ -229,7 +229,9 @@ For more information about how the `fastlane` plugin system works, check out the
 
 _fastlane_ is the easiest way to automate beta deployments and releases for your iOS and Android apps. To learn more, check out [fastlane.tools](https://fastlane.tools).
 
-## All Available Actions: Detailed Usage
+## Complete Action Reference Guide
+
+This comprehensive reference guide provides detailed usage examples, required parameters, and expected outputs for all actions available in the GitHub API plugin. Use these examples as templates for your own Fastlane workflows.
 
 ### Issues
 
@@ -256,5 +258,567 @@ github_add_labels(
   repo_name: "Hello-World",
   issue_number: 42,
   labels: ["bug", "help wanted"]
+)
+```
+
+#### `github_create_issue`
+Create a new GitHub issue.
+
+```ruby
+github_create_issue(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  title: "Found a bug",
+  body: "This is a description of the bug.",
+  labels: ["bug"],
+  assignees: ["octocat"],
+  milestone: 1
+)
+```
+
+#### `github_get_issue`
+Get a single GitHub issue.
+
+```ruby
+issue = github_get_issue(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  issue_number: 42
+)
+
+puts "Issue title: #{issue[:json]['title']}"
+puts "Issue state: #{issue[:json]['state']}"
+```
+
+#### `github_update_issue`
+Update an existing issue.
+
+```ruby
+github_update_issue(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  issue_number: 42,
+  title: "Updated issue title",
+  body: "Updated description",
+  state: "closed", # "open" or "closed"
+  labels: ["bug", "wontfix"],
+  assignees: ["octocat"],
+  milestone: 2
+)
+```
+
+#### `github_list_issues`
+List issues in a repository.
+
+```ruby
+issues = github_list_issues(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  state: "open", # "open", "closed", or "all"
+  sort: "created", # "created", "updated", "comments"
+  direction: "desc", # "asc" or "desc"
+  since: "2023-01-01T00:00:00Z", # Optional
+  labels: "bug,enhancement", # Optional
+  assignee: "octocat", # Optional
+  creator: "octocat", # Optional
+  mentioned: "octocat", # Optional
+  milestone: 1 # Optional
+)
+
+issues[:json].each do |issue|
+  puts "##{issue['number']} - #{issue['title']} (#{issue['state']})"
+end
+```
+
+#### `github_add_issue_comment`
+Add a comment to a GitHub issue.
+
+```ruby
+github_add_issue_comment(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  issue_number: 42,
+  body: "This is a comment on the issue."
+)
+```
+
+#### `github_list_issue_comments`
+List comments on an issue.
+
+```ruby
+comments = github_list_issue_comments(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  issue_number: 42,
+  since: "2023-01-01T00:00:00Z" # Optional
+)
+
+comments[:json].each do |comment|
+  puts "Comment by #{comment['user']['login']}: #{comment['body']}"
+end
+```
+
+### Pull Requests
+
+#### `github_create_pull`
+Create a new pull request.
+
+```ruby
+pull = github_create_pull(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  title: "Amazing new feature",
+  body: "Please pull these awesome changes in!",
+  head: "octocat:feature-branch",
+  base: "main",
+  draft: false,
+  maintainer_can_modify: true
+)
+
+puts "Created PR ##{pull[:json]['number']}"
+```
+
+#### `github_get_pull`
+Get a single pull request.
+
+```ruby
+pull = github_get_pull(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  pull_number: 42
+)
+
+puts "PR Title: #{pull[:json]['title']}"
+puts "Branch: #{pull[:json]['head']['ref']} -> #{pull[:json]['base']['ref']}"
+puts "State: #{pull[:json]['state']}"
+```
+
+#### `github_update_pull`
+Update a pull request.
+
+```ruby
+github_update_pull(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  pull_number: 42,
+  title: "Updated pull request title",
+  body: "Updated description",
+  state: "closed", # "open" or "closed"
+  base: "main", # Branch to merge changes into
+  maintainer_can_modify: true
+)
+```
+
+#### `github_list_pulls`
+List pull requests in a repository.
+
+```ruby
+pulls = github_list_pulls(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  state: "open", # "open", "closed", "all"
+  head: "octocat:feature", # Optional filter by head branch
+  base: "main", # Optional filter by base branch
+  sort: "created", # "created", "updated", "popularity", "long-running"
+  direction: "desc" # "asc" or "desc"
+)
+
+pulls[:json].each do |pull|
+  puts "PR ##{pull['number']}: #{pull['title']}"
+end
+```
+
+#### `github_merge_pull`
+Merge a pull request.
+
+```ruby
+github_merge_pull(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  pull_number: 42,
+  commit_title: "Merge pull request #42", # Optional
+  commit_message: "Merge pull request #42 from octocat/feature", # Optional
+  merge_method: "merge" # "merge", "squash", or "rebase"
+)
+```
+
+#### `github_check_pull_merged`
+Check if a pull request has been merged.
+
+```ruby
+result = github_check_pull_merged(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  pull_number: 42
+)
+
+if result[:status] == 204
+  UI.success "Pull request has been merged!"
+else
+  UI.message "Pull request has not been merged."
+end
+```
+
+#### `github_list_pull_commits`
+List commits on a pull request.
+
+```ruby
+commits = github_list_pull_commits(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  pull_number: 42
+)
+
+commits[:json].each do |commit|
+  puts "Commit SHA: #{commit['sha']}"
+  puts "Author: #{commit['commit']['author']['name']}"
+  puts "Message: #{commit['commit']['message']}"
+end
+```
+
+#### `github_list_pull_files`
+List files on a pull request.
+
+```ruby
+files = github_list_pull_files(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  pull_number: 42
+)
+
+files[:json].each do |file|
+  puts "File: #{file['filename']}"
+  puts "Status: #{file['status']}"
+  puts "Additions: #{file['additions']}, Deletions: #{file['deletions']}, Changes: #{file['changes']}"
+end
+```
+
+### Repositories
+
+#### `github_create_repository`
+Create a new repository.
+
+```ruby
+github_create_repository(
+  api_token: "<your_github_token>",
+  name: "new-repo",
+  description: "This is a new repository",
+  private: false,
+  has_issues: true,
+  has_projects: true,
+  has_wiki: true,
+  auto_init: true,
+  gitignore_template: "Ruby",
+  license_template: "mit",
+  organization: "octo-org" # Optional, create in organization instead of user account
+)
+```
+
+#### `github_delete_repository`
+Delete a repository.
+
+```ruby
+github_delete_repository(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World"
+)
+```
+
+#### `github_list_repo_labels`
+List labels for a repository.
+
+```ruby
+labels = github_list_repo_labels(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World"
+)
+
+labels[:json].each do |label|
+  puts "Label: #{label['name']} (#{label['color']})"
+end
+```
+
+#### `github_create_label`
+Create a label in a repository.
+
+```ruby
+github_create_label(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  name: "bug",
+  color: "f29513",
+  description: "Something isn't working" # Optional
+)
+```
+
+#### `github_update_label`
+Update a label in a repository.
+
+```ruby
+github_update_label(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  name: "bug",
+  new_name: "confirmed-bug", # Optional, only if changing the name
+  color: "b60205",
+  description: "Confirmed bugs that need to be fixed"
+)
+```
+
+#### `github_delete_label`
+Delete a label from a repository.
+
+```ruby
+github_delete_label(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  name: "wontfix"
+)
+```
+
+#### `github_list_milestones`
+List milestones for a repository.
+
+```ruby
+milestones = github_list_milestones(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  state: "open", # "open", "closed", "all"
+  sort: "due_on", # "due_on" or "completeness"
+  direction: "asc" # "asc" or "desc"
+)
+
+milestones[:json].each do |milestone|
+  puts "Milestone: #{milestone['title']} (#{milestone['state']})"
+  puts "Due on: #{milestone['due_on']}"
+end
+```
+
+#### `github_create_milestone`
+Create a milestone in a repository.
+
+```ruby
+github_create_milestone(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  title: "v1.0",
+  state: "open", # "open" or "closed"
+  description: "Tracking milestone for version 1.0",
+  due_on: "2023-12-31T23:59:59Z" # Optional due date
+)
+```
+
+#### `github_update_milestone`
+Update a milestone in a repository.
+
+```ruby
+github_update_milestone(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  milestone_number: 1,
+  title: "Updated title", # Optional
+  state: "closed", # Optional, "open" or "closed"
+  description: "Updated description", # Optional
+  due_on: "2024-01-31T23:59:59Z" # Optional due date
+)
+```
+
+#### `github_delete_milestone`
+Delete a milestone from a repository.
+
+```ruby
+github_delete_milestone(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  milestone_number: 1
+)
+```
+
+### Reactions
+
+#### `github_create_issue_reaction`
+Create a reaction for an issue.
+
+```ruby
+github_create_issue_reaction(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  issue_number: 42,
+  content: "+1" # Available reactions: +1, -1, laugh, confused, heart, hooray, rocket, eyes
+)
+```
+
+#### `github_list_issue_reactions`
+List reactions for an issue.
+
+```ruby
+reactions = github_list_issue_reactions(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  issue_number: 42,
+  content: "+1" # Optional filter by reaction type
+)
+
+puts "Total reactions: #{reactions[:json].count}"
+```
+
+#### `github_delete_issue_reaction`
+Delete a reaction from an issue.
+
+```ruby
+github_delete_issue_reaction(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  issue_number: 42,
+  reaction_id: 12345
+)
+```
+
+#### `github_create_issue_comment_reaction`
+Create a reaction for an issue comment.
+
+```ruby
+github_create_issue_comment_reaction(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  comment_id: 123456,
+  content: "heart" # Available reactions: +1, -1, laugh, confused, heart, hooray, rocket, eyes
+)
+```
+
+#### `github_list_issue_comment_reactions`
+List reactions for an issue comment.
+
+```ruby
+reactions = github_list_issue_comment_reactions(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  comment_id: 123456,
+  content: "heart" # Optional filter by reaction type
+)
+
+puts "Total reactions: #{reactions[:json].count}"
+```
+
+#### `github_delete_issue_comment_reaction`
+Delete a reaction from an issue comment.
+
+```ruby
+github_delete_issue_comment_reaction(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  comment_id: 123456,
+  reaction_id: 12345
+)
+```
+
+#### `github_create_pull_comment_reaction`
+Create a reaction for a pull request review comment.
+
+```ruby
+github_create_pull_comment_reaction(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  comment_id: 123456,
+  content: "heart" # Available reactions: +1, -1, laugh, confused, heart, hooray, rocket, eyes
+)
+```
+
+#### `github_list_pull_comment_reactions`
+List reactions for a pull request review comment.
+
+```ruby
+reactions = github_list_pull_comment_reactions(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  comment_id: 123456,
+  content: "heart" # Optional filter by reaction type
+)
+
+puts "Total reactions: #{reactions[:json].count}"
+```
+
+#### `github_delete_pull_comment_reaction`
+Delete a reaction from a pull request review comment.
+
+```ruby
+github_delete_pull_comment_reaction(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  comment_id: 123456,
+  reaction_id: 12345
+)
+```
+
+#### `github_create_commit_comment_reaction`
+Create a reaction for a commit comment.
+
+```ruby
+github_create_commit_comment_reaction(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  comment_id: 123456,
+  content: "heart" # Available reactions: +1, -1, laugh, confused, heart, hooray, rocket, eyes
+)
+```
+
+#### `github_list_commit_comment_reactions`
+List reactions for a commit comment.
+
+```ruby
+reactions = github_list_commit_comment_reactions(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  comment_id: 123456,
+  content: "heart" # Optional filter by reaction type
+)
+
+puts "Total reactions: #{reactions[:json].count}"
+```
+
+#### `github_delete_commit_comment_reaction`
+Delete a reaction from a commit comment.
+
+```ruby
+github_delete_commit_comment_reaction(
+  api_token: "<your_github_token>",
+  repo_owner: "octocat",
+  repo_name: "Hello-World",
+  comment_id: 123456,
+  reaction_id: 12345
 )
 ```
